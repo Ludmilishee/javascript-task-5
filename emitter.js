@@ -4,7 +4,7 @@
  * Сделано задание на звездочку
  * Реализованы методы several и through
  */
-getEmitter.isStar = true;
+getEmitter.isStar = false;
 module.exports = getEmitter;
 
 /**
@@ -73,7 +73,7 @@ function getEmitter() {
             }
 
             return this;
-        },
+        }
 
         /**
          * Подписаться на событие с ограничением по количеству полученных уведомлений
@@ -84,22 +84,22 @@ function getEmitter() {
          * @param {Number} times – сколько раз получить уведомление
          * @returns {Object}
          */
-        several: function (event, context, handler, times)
+        /*      several: function (event, context, handler) {
 
             return this;
-        },
+        }, */
 
-        /**
-         * Подписаться на событие с ограничением по частоте получения уведомлений
-         * @star
-         * @param {String} event
-         * @param {Object} context
-         * @param {Function} handler
-         * @param {Number} frequency – как часто уведомлять
-         * @returns {Object}
-         */
-        through: function (event, context, handler, frequency) {
+    /**
+     * Подписаться на событие с ограничением по частоте получения уведомлений
+     * @star
+     * @param {String} event
+     * @param {Object} context
+     * @param {Function} handler
+     * @param {Number} frequency – как часто уведомлять
+     * @returns {Object}
+     */
+        /*     through: function (event, context, handler, frequency) {
             return this;
-        }
+        } */
     };
 }
