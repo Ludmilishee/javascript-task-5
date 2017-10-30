@@ -42,12 +42,14 @@ function getEmitter() {
          * @returns {Object}
          */
         off: function (event, context) {
-            let index = this.handlers[event].findIndex(function (handler) {
-                return handler.student === context;
-            });
-            if (index !== undefined) {
-                this.handlers[event].splice(index, 1);
+            for (let handler in this.handlers) {
+                if (this.handlers.hasOwnProperty(handler) &&
+                    handler.indexOf(event + '.') !== -1) {
+                    unsubscribe(this.handlers, event, context);
+                    break;
+                }
             }
+            unsubscribe(this.handlers, event, context);
 
             return this;
         },
@@ -102,4 +104,13 @@ function getEmitter() {
             return this;
         } */
     };
+}
+
+function unsubscribe(handlers, event, context) {
+    let index = handlers[event].findIndex(function (handler) {
+        return handler.student === context;
+    });
+    if (index !== -1) {
+        handlers[event].splice(index, 1);
+    }
 }
