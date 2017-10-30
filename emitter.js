@@ -13,32 +13,66 @@ module.exports = getEmitter;
  */
 function getEmitter() {
     return {
+        handlers: {},
 
         /**
          * Подписаться на событие
          * @param {String} event
          * @param {Object} context
          * @param {Function} handler
+         * @returns {Object}
          */
         on: function (event, context, handler) {
-            console.info(event, context, handler);
+            if (!this.handlers.hasOwnProperty(event)) {
+                this.handlers[event] = [];
+            }
+            this.handlers[event].push(
+                {
+                    student: context,
+                    func: handler.bind(context)
+                });
+
+            return this;
         },
 
         /**
          * Отписаться от события
          * @param {String} event
          * @param {Object} context
+         * @returns {Object}
          */
         off: function (event, context) {
-            console.info(event, context);
+            let index = this.handlers[event].findIndex(function (handler) {
+                return handler.student === context;
+            });
+            if (index !== undefined) {
+                this.handlers[event].splice(index, 1);
+            }
+
+            return this;
         },
 
         /**
          * Уведомить о событии
          * @param {String} event
+         * @returns {Object}
          */
         emit: function (event) {
-            console.info(event);
+            let counter = event.split('.').length;
+            while (counter > 0) {
+                if (!this.handlers.hasOwnProperty(event)) {
+                    this.handlers[event] = [];
+                }
+                if (this.handlers.hasOwnProperty(event)) {
+                    this.handlers[event].forEach(function (handler) {
+                        handler.func();
+                    });
+                }
+                event = event.slice(0, event.lastIndexOf('.'));
+                counter--;
+            }
+
+            return this;
         },
 
         /**
@@ -48,9 +82,11 @@ function getEmitter() {
          * @param {Object} context
          * @param {Function} handler
          * @param {Number} times – сколько раз получить уведомление
+         * @returns {Object}
          */
-        several: function (event, context, handler, times) {
-            console.info(event, context, handler, times);
+        several: function (event, context, handler, times)
+
+            return this;
         },
 
         /**
@@ -60,9 +96,10 @@ function getEmitter() {
          * @param {Object} context
          * @param {Function} handler
          * @param {Number} frequency – как часто уведомлять
+         * @returns {Object}
          */
         through: function (event, context, handler, frequency) {
-            console.info(event, context, handler, frequency);
+            return this;
         }
     };
 }
