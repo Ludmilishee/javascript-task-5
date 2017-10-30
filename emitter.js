@@ -42,11 +42,17 @@ function getEmitter() {
          * @returns {Object}
          */
         off: function (event, context) {
+            let unsubscribedEvents = [];
             for (let handler in this.handlers) {
-                if (this.handlers.hasOwnProperty(handler) &&
-                    handler.indexOf(event + '.') !== -1) {
-                    unsubscribe(this.handlers, handler, context);
-                    break;
+                if (!this.handlers.hasOwnProperty(handler) ||
+                    handler.indexOf(event + '.') === -1) {
+                    continue;
+                }
+                let isAlreadyUnsub = unsubscribedEvents.some(function (item) {
+                    return item === handler;
+                });
+                if (!isAlreadyUnsub) {
+                    unsubscribedEvents.push(unsubscribe(this.handlers, handler, context));
                 }
             }
             unsubscribe(this.handlers, event, context);
