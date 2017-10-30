@@ -45,7 +45,7 @@ function getEmitter() {
             for (let handler in this.handlers) {
                 if (this.handlers.hasOwnProperty(handler) &&
                     handler.indexOf(event + '.') !== -1) {
-                    unsubscribe(this.handlers, event, context);
+                    unsubscribe(this.handlers, handler, context);
                     break;
                 }
             }
