@@ -65,7 +65,8 @@ function getEmitter() {
                 if (!this.handlers.hasOwnProperty(event)) {
                     this.handlers[event] = [];
                 }
-                if (this.handlers.hasOwnProperty(event)) {
+                if (this.handlers.hasOwnProperty(event) &&
+                this.handlers[event].length !== 0) {
                     this.handlers[event].forEach(function (handler) {
                         handler.func();
                     });
