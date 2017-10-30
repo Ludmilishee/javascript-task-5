@@ -114,10 +114,12 @@ function getEmitter() {
 }
 
 function unsubscribe(handlers, event, context) {
-    let index = handlers[event].findIndex(function (handler) {
-        return handler.student === context;
-    });
-    if (index !== -1) {
-        handlers[event].splice(index, 1);
+    if (handlers.hasOwnProperty(event)) {
+        let index = handlers[event].findIndex(function (handler) {
+            return handler.student === context;
+        });
+        if (index !== -1) {
+            handlers[event].splice(index, 1);
+        }
     }
 }
