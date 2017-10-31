@@ -55,7 +55,9 @@ function getEmitter() {
                     unsubscribedEvents.push(unsubscribe(this.handlers, handler, context));
                 }
             }
-            unsubscribe(this.handlers, event, context);
+            if (this.handlers.hasOwnProperty(event)) {
+                unsubscribe(this.handlers, event, context);
+            }
 
             return this;
         },
