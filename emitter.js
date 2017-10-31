@@ -23,6 +23,9 @@ function getEmitter() {
          * @returns {Object}
          */
         on: function (event, context, handler) {
+            if (event.length === 0) {
+                return this;
+            }
             if (!this.handlers.hasOwnProperty(event)) {
                 this.handlers[event] = [];
             }
