@@ -68,9 +68,6 @@ function getEmitter() {
         emit: function (event) {
             let counter = event.split('.').length;
             while (counter > 0) {
-                if (!this.handlers.hasOwnProperty(event)) {
-                    this.handlers[event] = [];
-                }
                 if (this.handlers.hasOwnProperty(event) &&
                 this.handlers[event].length !== 0) {
                     this.handlers[event].forEach(function (handler) {
