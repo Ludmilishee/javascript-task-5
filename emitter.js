@@ -40,6 +40,8 @@ function getEmitter() {
          * @returns {Object}
          */
         off: function (event, context) {
+
+            /*
             let unsubscribedEvents = [];
             if (!this.handlers.hasOwnProperty(event) &&
                 !Object.keys(this.handlers).some(handler => handler.startsWith(event + '.'))) {
@@ -57,6 +59,13 @@ function getEmitter() {
                 }
             }
             unsubscribe(this.handlers, event, context);
+            */
+            let unsubscribed = Object.keys(this.handlers).filter(handler =>
+                (handler.startsWith(event + '.') || event === handler));
+            unsubscribed.forEach(unsubEvent => {
+                this.handlers[unsubEvent] = this.handlers[unsubEvent].filter(handler =>
+                    handler.student !== context);
+            });
 
             return this;
         },
@@ -111,6 +120,7 @@ function getEmitter() {
     };
 }
 
+/*
 function unsubscribe(handlers, event, context) {
     if (handlers.hasOwnProperty(event)) {
         let index = handlers[event].findIndex(function (handler) {
@@ -121,3 +131,4 @@ function unsubscribe(handlers, event, context) {
         }
     }
 }
+*/
