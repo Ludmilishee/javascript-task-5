@@ -4,7 +4,7 @@
  * Сделано задание на звездочку
  * Реализованы методы several и through
  */
-getEmitter.isStar = false;
+getEmitter.isStar = true;
 module.exports = getEmitter;
 
 /**
@@ -57,7 +57,17 @@ function getEmitter() {
             while (counter > 0) {
                 if (this.handlers.hasOwnProperty(event)) {
                     this.handlers[event].forEach(function (handler) {
-                        handler.func();
+                        if (!handler.hasOwnProperty('times') &&
+                            !handler.hasOwnProperty('frequency') ||
+                            handler.count % handler.frequency === 0 || handler.count === 0) {
+                            handler.func();
+                        }
+                        if (handler.hasOwnProperty('times') && handler.times > 0) {
+                            handler.func();
+                            handler.times--;
+                        } else if (handler.hasOwnProperty('count')) {
+                            handler.count++;
+                        }
                     });
                 }
                 event = event.slice(0, event.lastIndexOf('.'));
@@ -82,10 +92,10 @@ function getEmitter() {
             if (times > 0) {
                 handlerObject.times = times;
             }
-            this.handlers.push(handlerObject);
+            this.handlers[event].push(handlerObject);
 
             return this;
-        }
+        },
 
         /**
          * Подписаться на событие с ограничением по частоте получения уведомлений
@@ -96,9 +106,17 @@ function getEmitter() {
          * @param {Number} frequency – как часто уведомлять
          * @returns {Object}
          */
-    /*      through: function (event, context, handler, frequency) {
+        through: function (event, context, handler, frequency) {
+            this.handlers[event] = this.handlers[event] || [];
+            let handlerObject = createHandler(context, handler);
+            if (frequency > 0) {
+                handlerObject.frequency = frequency;
+                handlerObject.count = 0;
+            }
+            this.handlers[event].push(handlerObject);
+
             return this;
-        } */
+        }
     };
 }
 
