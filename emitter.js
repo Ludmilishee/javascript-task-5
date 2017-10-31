@@ -23,9 +23,7 @@ function getEmitter() {
          * @returns {Object}
          */
         on: function (event, context, handler) {
-            if (!this.handlers.hasOwnProperty(event)) {
-                this.handlers[event] = [];
-            }
+            this.handlers[event] = this.handlers[event] || [];
             this.handlers[event].push(
                 {
                     student: context,
@@ -44,7 +42,7 @@ function getEmitter() {
         off: function (event, context) {
             let unsubscribedEvents = [];
             if (!this.handlers.hasOwnProperty(event) &&
-                !Object.keys(this.handlers).some(handler => handler.startsWith(event + '.'))) {
+                !Object.keys(this.handlers).every(handler => handler.startsWith(event + '.'))) {
                 return this;
             }
             for (let handler in this.handlers) {
