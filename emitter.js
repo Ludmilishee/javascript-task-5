@@ -24,11 +24,7 @@ function getEmitter() {
          */
         on: function (event, context, handler) {
             this.handlers[event] = this.handlers[event] || [];
-            this.handlers[event].push(
-                {
-                    student: context,
-                    func: handler.bind(context)
-                });
+            this.handlers[event].push(createHandler(context, handler));
 
             return this;
         },
@@ -41,25 +37,6 @@ function getEmitter() {
          */
         off: function (event, context) {
 
-            /*
-            let unsubscribedEvents = [];
-            if (!this.handlers.hasOwnProperty(event) &&
-                !Object.keys(this.handlers).some(handler => handler.startsWith(event + '.'))) {
-                return this;
-            }
-            for (let handler in this.handlers) {
-                if (!handler.startsWith(event + '.')) {
-                    continue;
-                }
-                let isAlreadyUnsub = unsubscribedEvents.some(function (item) {
-                    return item === handler;
-                });
-                if (!isAlreadyUnsub) {
-                    unsubscribedEvents.push(unsubscribe(this.handlers, handler, context));
-                }
-            }
-            unsubscribe(this.handlers, event, context);
-            */
             let unsubscribed = Object.keys(this.handlers).filter(handler =>
                 (handler.startsWith(event + '.') || event === handler));
             unsubscribed.forEach(unsubEvent => {
@@ -78,8 +55,7 @@ function getEmitter() {
         emit: function (event) {
             let counter = event.split('.').length;
             while (counter > 0) {
-                if (this.handlers.hasOwnProperty(event) &&
-                this.handlers[event].length !== 0) {
+                if (this.handlers.hasOwnProperty(event)) {
                     this.handlers[event].forEach(function (handler) {
                         handler.func();
                     });
@@ -89,7 +65,7 @@ function getEmitter() {
             }
 
             return this;
-        }
+        },
 
         /**
          * Подписаться на событие с ограничением по количеству полученных уведомлений
@@ -100,35 +76,36 @@ function getEmitter() {
          * @param {Number} times – сколько раз получить уведомление
          * @returns {Object}
          */
-        /*      several: function (event, context, handler) {
+        several: function (event, context, handler, times) {
+            this.handlers[event] = this.handlers[event] || [];
+            let handlerObject = createHandler(context, handler);
+            if (times > 0) {
+                handlerObject.times = times;
+            }
+            this.handlers.push(handlerObject);
 
             return this;
-        }, */
+        }
 
-    /**
-     * Подписаться на событие с ограничением по частоте получения уведомлений
-     * @star
-     * @param {String} event
-     * @param {Object} context
-     * @param {Function} handler
-     * @param {Number} frequency – как часто уведомлять
-     * @returns {Object}
-     */
-        /*     through: function (event, context, handler, frequency) {
+        /**
+         * Подписаться на событие с ограничением по частоте получения уведомлений
+         * @star
+         * @param {String} event
+         * @param {Object} context
+         * @param {Function} handler
+         * @param {Number} frequency – как часто уведомлять
+         * @returns {Object}
+         */
+    /*      through: function (event, context, handler, frequency) {
             return this;
         } */
     };
 }
 
-/*
-function unsubscribe(handlers, event, context) {
-    if (handlers.hasOwnProperty(event)) {
-        let index = handlers[event].findIndex(function (handler) {
-            return handler.student === context;
-        });
-        if (index !== -1) {
-            handlers[event].splice(index, 1);
-        }
-    }
+function createHandler(context, handler) {
+    return {
+        student: context,
+        func: handler.bind(context)
+    };
 }
-*/
+
