@@ -23,11 +23,8 @@ function getEmitter() {
          * @returns {Object}
          */
         on: function (event, context, handler) {
-            if (event.length === 0 || event === '.') {
+            if (event.length === 0 || typeof handler !== 'function') {
                 return this;
-            }
-            if (event.slice(-1) === '.') {
-                event = event.slice(0, event.length - 1);
             }
             if (!this.handlers.hasOwnProperty(event)) {
                 this.handlers[event] = [];
