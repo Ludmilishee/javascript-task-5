@@ -43,7 +43,8 @@ function getEmitter() {
          */
         off: function (event, context) {
             let unsubscribedEvents = [];
-            if (!Object.keys(this.handlers).some(handler => handler.startsWith(event + '.'))) {
+            if (!this.handlers.hasOwnProperty(event) &&
+                !Object.keys(this.handlers).some(handler => handler.startsWith(event + '.'))) {
                 return this;
             }
             for (let handler in this.handlers) {
