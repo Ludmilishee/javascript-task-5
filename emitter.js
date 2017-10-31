@@ -46,12 +46,11 @@ function getEmitter() {
          */
         off: function (event, context) {
             let unsubscribedEvents = [];
-            if (!this.handlers.hasOwnProperty(event)) {
+            if (!this.handlers.hasOwnProperty(event) || event === undefined) {
                 return this;
             }
             for (let handler in this.handlers) {
-                if (!this.handlers.hasOwnProperty(handler) ||
-                    handler.indexOf(event + '.') === -1) {
+                if (handler.indexOf(event + '.') === -1) {
                     continue;
                 }
                 let isAlreadyUnsub = unsubscribedEvents.some(function (item) {
