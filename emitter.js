@@ -23,8 +23,11 @@ function getEmitter() {
          * @returns {Object}
          */
         on: function (event, context, handler) {
-            if (event.length === 0) {
+            if (event.length === 0 || event === '.') {
                 return this;
+            }
+            if (event.slice(-1) === '.') {
+                event = event.slice(0, event.length - 1);
             }
             if (!this.handlers.hasOwnProperty(event)) {
                 this.handlers[event] = [];
@@ -46,7 +49,7 @@ function getEmitter() {
          */
         off: function (event, context) {
             let unsubscribedEvents = [];
-            if (!this.handlers.hasOwnProperty(event) || event === undefined) {
+            if (!this.handlers.hasOwnProperty(event)) {
                 return this;
             }
             for (let handler in this.handlers) {
