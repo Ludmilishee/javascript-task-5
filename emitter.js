@@ -37,7 +37,7 @@ function getEmitter() {
          */
         off: function (event, context) {
 
-            let unsubscribed = Object.keys(this.handlers).filter(handler =>
+            const unsubscribed = Object.keys(this.handlers).filter(handler =>
                 (handler.startsWith(event + '.') || event === handler));
             unsubscribed.forEach(unsubEvent => {
                 this.handlers[unsubEvent] = this.handlers[unsubEvent].filter(handler =>
@@ -88,7 +88,7 @@ function getEmitter() {
          */
         several: function (event, context, handler, times) {
             this.handlers[event] = this.handlers[event] || [];
-            let handlerObject = createHandler(context, handler);
+            const handlerObject = createHandler(context, handler);
             if (times > 0) {
                 handlerObject.times = times;
             }
@@ -108,7 +108,7 @@ function getEmitter() {
          */
         through: function (event, context, handler, frequency) {
             this.handlers[event] = this.handlers[event] || [];
-            let handlerObject = createHandler(context, handler);
+            const handlerObject = createHandler(context, handler);
             if (frequency > 0) {
                 handlerObject.frequency = frequency;
                 handlerObject.count = 0;
